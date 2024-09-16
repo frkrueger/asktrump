@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Trump</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+        .response {
+            margin-top: 20px;
+            font-size: 18px;
+            font-style: italic;
+            color: #333;
+        }
+        .reset-btn {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="mb-4">Ask Trump a Question</h1>
+        <form id="trumpForm" class="mb-3">
+            <div class="mb-3">
+                <input type="text" id="question" class="form-control" placeholder="Type your question here..." required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ask</button>
+        </form>
+        <div id="response" class="response"></div>
+        <button id="resetBtn" class="btn btn-success reset-btn" style="display:none;">Ask Another Question</button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        const responses = [
+            "Nobody knows more about this than me, believe me.",
+            "I've been saying this for years, and now everyone agrees with me.",
+            "We’re doing a fantastic job, absolutely tremendous.",
+            "A lot of people are talking about it. It's a big deal.",
+            "It’s going to be huge, you’ll see.",
+            "We’ve had the greatest success ever in history. Nobody’s ever done it like this.",
+            "I know more about it than the so-called experts.",
+            "Everyone’s saying it, but I’ve been saying it for a long time.",
+            "The fake news won’t tell you this, but everyone knows it’s true.",
+            "I’ve done more than any other president, maybe in history.",
+            "People come up to me and say, 'Sir, thank you.'",
+            "We have the best people working on it, the absolute best.",
+            "Believe me, nobody wants this more than me.",
+            "We’re making America great again, no question.",
+            "Everyone told me it couldn’t be done, but I got it done.",
+            "It’s a tremendous success, a complete game changer.",
+            "Nobody’s ever seen anything like this before.",
+            "I’m very smart, I went to the best schools.",
+            "I know the best people, and they tell me I’m doing great.",
+            "I’ve built an incredible business, nobody builds like me.",
+            "You wouldn’t believe it if I told you.",
+            "We’ve turned things around like nobody else could.",
+            "People are thanking me, saying I saved the country.",
+            "Nobody thought we could do it, but we did it.",
+            "It’s a disaster, folks. But I’m fixing it.",
+            "The media is not telling you the real story.",
+            "I’ve done more in my first term than any president before me.",
+            "We’re winning like never before.",
+            "I have the best ideas, people are always telling me that.",
+            "The numbers are through the roof, it’s incredible.",
+            "We’re leading in all the polls, it’s a landslide.",
+            "I’m the most successful president in history, no question.",
+            "The other side doesn’t know what they’re doing.",
+            "I’ve done more for the American people than anyone else.",
+            "Everyone’s saying I’m doing an amazing job.",
+            "We’re fixing the problems nobody else could fix.",
+            "It’s all coming together, better than anyone expected.",
+            "We’re getting things done that no one thought possible.",
+            "I’m the best thing that ever happened to this country.",
+            "Everyone’s talking about it, it’s huge.",
+            "We’ve created millions of jobs, more than anyone else.",
+            "Nobody else could have done this, only me.",
+            "I’ve accomplished more than any other president.",
+            "We’re bringing back the American dream, folks.",
+            "I’ve got the best team, believe me.",
+            "People are shocked at how well we’re doing.",
+            "Nobody thought we could turn it around this quickly.",
+            "I’ve done more for the military than anyone before.",
+            "The economy is booming like never before.",
+            "They said it couldn’t be done, but we did it.",
+            "We’re winning, and we’re going to keep winning.",
+            "The stock market has never been higher, it’s unbelievable.",
+            "Everyone’s talking about how great we’re doing.",
+            "It’s all because of me, nobody else could do it.",
+            "We’ve made tremendous progress, more than anyone expected.",
+            "We’re crushing it, folks.",
+            "The numbers are incredible, nobody’s ever seen anything like it.",
+            "We’re making deals that nobody thought possible.",
+            "I’ve done more for this country than anyone else.",
+            "We’re respected again, the world is taking notice.",
+            "People are saying I’m the best president ever.",
+            "We’ve brought back jobs like you wouldn’t believe.",
+            "Everyone’s saying I’m the best dealmaker.",
+            "It’s all about winning, and we’re winning big.",
+            "I’ve done things that nobody thought could be done.",
+            "We’re leading in every poll, it’s incredible.",
+            "Nobody’s ever seen numbers like these.",
+            "We’re getting things done faster than anyone thought possible.",
+            "Everyone told me it was impossible, but I proved them wrong.",
+            "The fake news won’t cover this, but we’re doing great.",
+            "We’re breaking records every single day.",
+            "Nobody else could have achieved what we’ve achieved.",
+            "We’re making history, folks.",
+            "It’s a total success, nobody’s ever done it better.",
+            "I know how to get things done, that’s why people love me.",
+            "We’ve turned this country around in a way nobody thought possible.",
+            "People are saying it’s the best it’s ever been.",
+            "I’ve done more for the American people than anyone else.",
+            "We’re winning like we’ve never won before.",
+            "The economy is stronger than it’s ever been.",
+            "Nobody could have done this but me.",
+            "We’ve made America respected again.",
+            "Everyone said it was impossible, but I proved them wrong.",
+            "We’re doing things nobody thought were possible.",
+            "I’ve created more jobs than any president before.",
+            "We’re winning on every level, folks.",
+            "People are saying they’ve never seen anything like it.",
+            "I’ve been very successful, just look at the numbers.",
+            "The American people are winning, and they love me for it.",
+            "We’ve made this country great again.",
+            "The results speak for themselves, we’re doing fantastic.",
+            "I know more about this than anyone else.",
+            "We’re getting things done that nobody else could.",
+            "Everyone’s saying it’s a huge success.",
+            "I’ve done things that no president before me has done.",
+            "We’re seeing results that are off the charts.",
+            "I’ve been saying it for years, and now everyone agrees with me.",
+            "Nobody’s ever seen a recovery like this.",
+            "We’re stronger than ever before, folks.",
+            "It’s unbelievable what we’ve accomplished in such a short time."
+        ];
+
+        document.getElementById('trumpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            document.getElementById('response').textContent = randomResponse;
+            document.getElementById('resetBtn').style.display = 'block';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.getElementById('response').textContent = '';
+            document.getElementById('question').value = '';
+            document.getElementById('resetBtn').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
